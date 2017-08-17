@@ -1,2 +1,4 @@
-<intelxdk:plugin intelxdk:name="https://github.com/cranberrygame/cordova-plugin-ad-adcolony" intelxdk:value="https://github.com/cranberrygame/cordova-plugin-ad-adcolony" />
+<intelxdk:plugin intelxdk:name="https://github.com/cranberrygame/cordova-plugin-ad-adbuddiz" intelxdk:value="https://github.com/cranberrygame/cordova-plugin-ad-adbuddiz" />
 <intelxdk:plugin intelxdk:name="https://github.com/cranberrygame/cordova-plugin-ad-revmob" intelxdk:value="https://github.com/cranberrygame/cordova-plugin-ad-revmob" />
+<intelxdk:plugin intelxdk:name="https://github.com/cranberrygame/cordova-plugin-ad-unityads" intelxdk:value="https://github.com/cranberrygame/cordova-plugin-ad-unityads" />
+<intelxdk:plugin intelxdk:name="https://github.com/cranberrygame/cordova-plugin-ad-vungle" intelxdk:value="https://github.com/cranberrygame/cordova-plugin-ad-vungle" />

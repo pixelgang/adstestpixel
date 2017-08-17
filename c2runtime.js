@@ -17559,7 +17559,7 @@ cr.plugins_.Touch = function(runtime)
 ;
 ;
 /*
-cr.plugins_.cranberrygame_CordovaAdColony = function(runtime)
+cr.plugins_.cranberrygame_CordovaAdBuddiz = function(runtime)
 {
 	this.runtime = runtime;
 	Type
@@ -17573,13 +17573,13 @@ cr.plugins_.cranberrygame_CordovaAdColony = function(runtime)
 	exps
 };
 */
-cr.plugins_.cranberrygame_CordovaAdColony = function(runtime)
+cr.plugins_.cranberrygame_CordovaAdBuddiz = function(runtime)
 {
 	this.runtime = runtime;
 };
 (function ()
 {
-	var pluginProto = cr.plugins_.cranberrygame_CordovaAdColony.prototype;
+	var pluginProto = cr.plugins_.cranberrygame_CordovaAdBuddiz.prototype;
 	pluginProto.Type = function(plugin)
 	{
 		this.plugin = plugin;
@@ -17590,9 +17590,7 @@ cr.plugins_.cranberrygame_CordovaAdColony = function(runtime)
 	var fbAppID = "";
 	var fbAppSecret = "";
 */
-	var appId = "";
-	var interstitialAdZoneId = "";
-	var rewardedVideoAdZoneId = "";
+	var publisherKey = "";
 	var email = "";
 	var licenseKey = "";
 	typeProto.onCreate = function()
@@ -17645,50 +17643,49 @@ cr.plugins_.cranberrygame_CordovaAdColony = function(runtime)
 /*
 		var self=this;
 		window.addEventListener("resize", function () {//cranberrygame
-			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdColony.prototype.cnds.TriggerCondition, self);
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdBuddiz.prototype.cnds.TriggerCondition, self);
 		});
 */
 		if (!(this.runtime.isAndroid || this.runtime.isiOS))
 			return;
-        if (typeof window["adcolony"] == 'undefined')
+        if (typeof window["adbuddiz"] == 'undefined')
             return;
-		if (this.runtime.isAndroid){
-			appId = this.properties[0];
-			interstitialAdZoneId = this.properties[1];
-			rewardedVideoAdZoneId = this.properties[2];
-		}
-		else if (this.runtime.isiOS){
-			appId = this.properties[3];
-			interstitialAdZoneId = this.properties[4];
-			rewardedVideoAdZoneId = this.properties[5];
-		}
+		publisherKey = "";
+		if (this.runtime.isAndroid)
+			publisherKey = this.properties[0];
+		else if (this.runtime.isiOS)
+			publisherKey = this.properties[1];
 		email = "cranberrygame@yahoo.com";
-		licenseKey = "0eb9ec450477042bf5bc475b241b8c52";
-		if (appId == "")
-			return;
+		licenseKey = "f0710ba90da977bea2870986716de110";
+		window["adbuddiz"]["setLicenseKey"](email, licenseKey);
+		window["adbuddiz"]["setUp"](publisherKey);
 		var self = this;
-		window["adcolony"]["setLicenseKey"](email, licenseKey);
-		window["adcolony"]["setUp"](appId, interstitialAdZoneId, rewardedVideoAdZoneId);
-		window['adcolony']['onInterstitialAdLoaded'] = function() {
-			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdColony.prototype.cnds.OnInterstitialAdLoaded, self);
+		window["adbuddiz"]['onInterstitialAdPreloaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdBuddiz.prototype.cnds.OnInterstitialAdPreloaded, self);
 		};
-		window["adcolony"]['onInterstitialAdShown'] = function() {
-			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdColony.prototype.cnds.OnInterstitialAdShown, self);
+		window["adbuddiz"]['onInterstitialAdLoaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdBuddiz.prototype.cnds.OnInterstitialAdLoaded, self);
 		};
-		window["adcolony"]['onInterstitialAdHidden'] = function() {
-			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdColony.prototype.cnds.OnInterstitialAdHidden, self);
+		window["adbuddiz"]['onInterstitialAdShown'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdBuddiz.prototype.cnds.OnInterstitialAdShown, self);
 		};
-		window['adcolony']['onRewardedVideoAdLoaded'] = function() {
-			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdColony.prototype.cnds.OnRewardedVideoAdLoaded, self);
+		window["adbuddiz"]['onInterstitialAdHidden'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdBuddiz.prototype.cnds.OnInterstitialAdHidden, self);
 		};
-		window["adcolony"]['onRewardedVideoAdShown'] = function() {
-			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdColony.prototype.cnds.OnRewardedVideoAdShown, self);
+		window["adbuddiz"]["onRewardedVideoAdPreloaded"] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdBuddiz.prototype.cnds.OnRewardedVideoAdPreloaded, self);
 		};
-		window["adcolony"]['onRewardedVideoAdHidden'] = function() {
-			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdColony.prototype.cnds.OnRewardedVideoAdHidden, self);
+		window["adbuddiz"]["onRewardedVideoAdLoaded"] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdBuddiz.prototype.cnds.OnRewardedVideoAdLoaded, self);
 		};
-		window["adcolony"]['onRewardedVideoAdCompleted'] = function() {
-			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdColony.prototype.cnds.OnRewardedVideoAdCompleted, self);
+		window["adbuddiz"]["onRewardedVideoAdShown"] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdBuddiz.prototype.cnds.OnRewardedVideoAdShown, self);
+		};
+		window["adbuddiz"]["onRewardedVideoAdHidden"] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdBuddiz.prototype.cnds.OnRewardedVideoAdHidden, self);
+		};
+		window["adbuddiz"]["onRewardedVideoAdCompleted"] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdBuddiz.prototype.cnds.OnRewardedVideoAdCompleted, self);
 		};
 	};
 	instanceProto.draw = function(ctx)
@@ -17718,11 +17715,39 @@ cr.plugins_.cranberrygame_CordovaAdColony = function(runtime)
 		return true;
 	};
 */
+	Cnds.prototype.OnInterstitialAdPreloaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnInterstitialAdLoaded = function ()
+	{
+		return true;
+	};
 	Cnds.prototype.OnInterstitialAdShown = function ()
 	{
 		return true;
 	};
 	Cnds.prototype.OnInterstitialAdHidden = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.IsShowingInterstitialAd = function ()
+	{
+	    if (typeof window["adbuddiz"] == 'undefined')
+			return false;
+		return window["adbuddiz"]["isShowingInterstitialAd"]();
+	};
+	Cnds.prototype.LoadedInterstitialAd = function ()
+	{
+	    if (typeof window["adbuddiz"] == 'undefined')
+			return false;
+		return window["adbuddiz"]["loadedInterstitialAd"]();
+	};
+	Cnds.prototype.OnRewardedVideoAdPreloaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnRewardedVideoAdLoaded = function ()
 	{
 		return true;
 	};
@@ -17738,41 +17763,17 @@ cr.plugins_.cranberrygame_CordovaAdColony = function(runtime)
 	{
 		return true;
 	};
-	Cnds.prototype.IsShowingInterstitialAd = function ()
-	{
-		if (!(this.runtime.isAndroid || this.runtime.isiOS))
-			return;
-        if (typeof window["adcolony"] == 'undefined')
-            return;
-		return window["adcolony"]["isShowingInterstitialAd"]();
-	};
 	Cnds.prototype.IsShowingRewardedVideoAd = function ()
 	{
-		if (!(this.runtime.isAndroid || this.runtime.isiOS))
-			return;
-        if (typeof window["adcolony"] == 'undefined')
-            return;
-		return window["adcolony"]["isShowingRewardedVideoAd"]();
-	};
-	Cnds.prototype.OnInterstitialAdLoaded = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.OnRewardedVideoAdLoaded = function ()
-	{
-		return true;
-	};
-	Cnds.prototype.LoadedInterstitialAd = function ()
-	{
-	    if (typeof window["adcolony"] == 'undefined')
+	    if (typeof window["adbuddiz"] == "undefined")
 			return false;
-		return window["adcolony"]["loadedInterstitialAd"]();
+		return window["adbuddiz"]["isShowingRewardedVideoAd"]();
 	};
 	Cnds.prototype.LoadedRewardedVideoAd = function ()
 	{
-	    if (typeof window["adcolony"] == 'undefined')
+	    if (typeof window["adbuddiz"] == "undefined")
 			return false;
-		return window["adcolony"]["loadedRewardedVideoAd"]();
+		return window["adbuddiz"]["loadedRewardedVideoAd"]();
 	};
 	pluginProto.cnds = new Cnds();
 	function Acts() {};
@@ -17784,28 +17785,40 @@ cr.plugins_.cranberrygame_CordovaAdColony = function(runtime)
 	Acts.prototype.TriggerAction = function ()
 	{
 		var self=this;
-		self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdColony.prototype.cnds.TriggerCondition, self);
+		self.runtime.trigger(cr.plugins_.cranberrygame_CordovaAdBuddiz.prototype.cnds.TriggerCondition, self);
 	};
 */
+	Acts.prototype.PreloadInterstitialAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["adbuddiz"] == 'undefined')
+            return;
+		window["adbuddiz"]["preloadInterstitialAd"]();
+	}
 	Acts.prototype.ShowInterstitialAd = function ()
 	{
 		if (!(this.runtime.isAndroid || this.runtime.isiOS))
 			return;
-        if (typeof window["adcolony"] == 'undefined')
+        if (typeof window["adbuddiz"] == 'undefined')
             return;
-		if (appId == "")
-			return;
-		window["adcolony"]["showInterstitialAd"]();
+		window["adbuddiz"]["showInterstitialAd"]();
 	};
+	Acts.prototype.PreloadRewardedVideoAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["adbuddiz"] == "undefined")
+            return;
+		window["adbuddiz"]["preloadRewardedVideoAd"]();
+	}
 	Acts.prototype.ShowRewardedVideoAd = function ()
 	{
 		if (!(this.runtime.isAndroid || this.runtime.isiOS))
 			return;
-        if (typeof window["adcolony"] == 'undefined')
+        if (typeof window["adbuddiz"] == "undefined")
             return;
-		if (appId == "")
-			return;
-		window["adcolony"]["showRewardedVideoAd"]();
+		window["adbuddiz"]["showRewardedVideoAd"]();
 	};
 	pluginProto.acts = new Acts();
 	function Exps() {};
@@ -18361,14 +18374,564 @@ cr.plugins_.cranberrygame_CordovaRevMob = function(runtime)
 */
 	pluginProto.exps = new Exps();
 }());
+;
+;
+/*
+cr.plugins_.cranberrygame_CordovaUnityAds = function(runtime)
+{
+	this.runtime = runtime;
+	Type
+		onCreate
+	Instance
+		onCreate
+		draw
+		drawGL
+	cnds
+	acts
+	exps
+};
+*/
+cr.plugins_.cranberrygame_CordovaUnityAds = function(runtime)
+{
+	this.runtime = runtime;
+};
+(function ()
+{
+	var pluginProto = cr.plugins_.cranberrygame_CordovaUnityAds.prototype;
+	pluginProto.Type = function(plugin)
+	{
+		this.plugin = plugin;
+		this.runtime = plugin.runtime;
+	};
+	var typeProto = pluginProto.Type.prototype;
+/*
+	var fbAppID = "";
+	var fbAppSecret = "";
+*/
+	var gameId = "";
+	var videoAdPlacementId = "";
+	var rewardedVideoAdPlacementId = "";
+	var isTest = true;
+	var email = "";
+	var licenseKey = "";
+	typeProto.onCreate = function()
+	{
+/*
+		var newScriptTag=document.createElement('script');
+		newScriptTag.setAttribute("type","text/javascript");
+		newScriptTag.setAttribute("src", "mylib.js");
+		document.getElementsByTagName("head")[0].appendChild(newScriptTag);
+		var scripts=document.getElementsByTagName("script");
+		var scriptExist=false;
+		for(var i=0;i<scripts.length;i++){
+			if(scripts[i].src.indexOf("cordova.js")!=-1||scripts[i].src.indexOf("phonegap.js")!=-1){
+				scriptExist=true;
+				break;
+			}
+		}
+		if(!scriptExist){
+			var newScriptTag=document.createElement("script");
+			newScriptTag.setAttribute("type","text/javascript");
+			newScriptTag.setAttribute("src", "cordova.js");
+			document.getElementsByTagName("head")[0].appendChild(newScriptTag);
+		}
+*/
+		if(this.runtime.isBlackberry10 || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81){
+			var scripts=document.getElementsByTagName("script");
+			var scriptExist=false;
+			for(var i=0;i<scripts.length;i++){
+				if(scripts[i].src.indexOf("cordova.js")!=-1||scripts[i].src.indexOf("phonegap.js")!=-1){
+					scriptExist=true;
+					break;
+				}
+			}
+			if(!scriptExist){
+				var newScriptTag=document.createElement("script");
+				newScriptTag.setAttribute("type","text/javascript");
+				newScriptTag.setAttribute("src", "cordova.js");
+				document.getElementsByTagName("head")[0].appendChild(newScriptTag);
+			}
+		}
+	};
+	pluginProto.Instance = function(type)
+	{
+		this.type = type;
+		this.runtime = type.runtime;
+	};
+	var instanceProto = pluginProto.Instance.prototype;
+	instanceProto.onCreate = function()
+	{
+/*
+		var self=this;
+		window.addEventListener("resize", function () {//cranberrygame
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaUnityAds.prototype.cnds.TriggerCondition, self);
+		});
+*/
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["unityads"] == 'undefined')
+            return;
+		if (this.runtime.isAndroid){
+			gameId = this.properties[0];
+			videoAdPlacementId = this.properties[1];
+			rewardedVideoAdPlacementId = this.properties[2];
+		}
+		else if (this.runtime.isiOS){
+			gameId = this.properties[3];
+			videoAdPlacementId = this.properties[4];
+			rewardedVideoAdPlacementId = this.properties[5];
+		}
+		isTest = this.properties[6]==0?false:true;
+		email = "cranberrygame@yahoo.com";
+		licenseKey = "ac06b5af2f9d0e5daa5210bb8e394681";
+		if (gameId == "")
+			return;
+		var self = this;
+		window["unityads"]["setLicenseKey"](email, licenseKey);
+		window["unityads"]["setUp"](gameId, videoAdPlacementId, rewardedVideoAdPlacementId, isTest);
+		window["unityads"]['onVideoAdLoaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaUnityAds.prototype.cnds.OnVideoAdLoaded, self);
+		};
+		window["unityads"]['onVideoAdShown'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaUnityAds.prototype.cnds.OnVideoAdShown, self);
+		};
+		window["unityads"]['onVideoAdHidden'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaUnityAds.prototype.cnds.OnVideoAdHidden, self);
+		};
+		window["unityads"]['onRewardedVideoAdLoaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaUnityAds.prototype.cnds.OnRewardedVideoAdLoaded, self);
+		};
+		window["unityads"]['onRewardedVideoAdShown'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaUnityAds.prototype.cnds.OnRewardedVideoAdShown, self);
+		};
+		window["unityads"]['onRewardedVideoAdHidden'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaUnityAds.prototype.cnds.OnRewardedVideoAdHidden, self);
+		};
+		window["unityads"]['onRewardedVideoAdCompleted'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaUnityAds.prototype.cnds.OnRewardedVideoAdCompleted, self);
+		};
+	};
+	instanceProto.draw = function(ctx)
+	{
+	};
+	instanceProto.drawGL = function (glw)
+	{
+	};
+/*
+	instanceProto.at = function (x)
+	{
+		return this.arr[x];
+	};
+	instanceProto.set = function (x, val)
+	{
+		this.arr[x] = val;
+	};
+*/
+	function Cnds() {};
+/*
+	Cnds.prototype.MyCondition = function (myparam)
+	{
+		return myparam >= 0;
+	};
+	Cnds.prototype.TriggerCondition = function ()
+	{
+		return true;
+	};
+*/
+	Cnds.prototype.OnVideoAdLoaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnVideoAdShown = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnVideoAdHidden = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnRewardedVideoAdLoaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnRewardedVideoAdShown = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnRewardedVideoAdHidden = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnRewardedVideoAdCompleted = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.LoadedVideoAd = function ()
+	{
+	    if (typeof window["unityads"] == 'undefined')
+			return false;
+		return window["unityads"]["loadedVideoAd"]();
+	};
+	Cnds.prototype.LoadedRewardedVideoAd = function ()
+	{
+	    if (typeof window["unityads"] == 'undefined')
+			return false;
+		return window["unityads"]["loadedRewardedVideoAd"]();
+	};
+	Cnds.prototype.IsShowingVideoAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["unityads"] == 'undefined')
+            return;
+		return window["unityads"]["isShowingVideoAd"]();
+	};
+	Cnds.prototype.IsShowingRewardedVideoAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["unityads"] == 'undefined')
+            return;
+		return window["unityads"]["isShowingRewardedVideoAd"]();
+	};
+	pluginProto.cnds = new Cnds();
+	function Acts() {};
+/*
+	Acts.prototype.MyAction = function (myparam)
+	{
+		alert(myparam);
+	};
+	Acts.prototype.TriggerAction = function ()
+	{
+		var self=this;
+		self.runtime.trigger(cr.plugins_.cranberrygame_CordovaUnityAds.prototype.cnds.TriggerCondition, self);
+	};
+*/
+	Acts.prototype.ShowVideoAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["unityads"] == 'undefined')
+            return;
+		if (gameId == "")
+			return;
+		window["unityads"]["showVideoAd"]();
+	};
+	Acts.prototype.ShowRewardedVideoAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["unityads"] == 'undefined')
+            return;
+		if (gameId == "")
+			return;
+		window["unityads"]["showRewardedVideoAd"]();
+	};
+	pluginProto.acts = new Acts();
+	function Exps() {};
+/*
+	Exps.prototype.MyExpression = function (ret)	// 'ret' must always be the first parameter - always return the expression's result through it!
+	{
+		ret.set_int(1337);				// return our value
+	};
+	Exps.prototype.Text = function (ret, param) //cranberrygame
+	{
+		ret.set_string("Hello");		// for ef_return_string
+	};
+*/
+	pluginProto.exps = new Exps();
+}());
+;
+;
+/*
+cr.plugins_.cranberrygame_CordovaVungle = function(runtime)
+{
+	this.runtime = runtime;
+	Type
+		onCreate
+	Instance
+		onCreate
+		draw
+		drawGL
+	cnds
+	acts
+	exps
+};
+*/
+cr.plugins_.cranberrygame_CordovaVungle = function(runtime)
+{
+	this.runtime = runtime;
+};
+(function ()
+{
+	var pluginProto = cr.plugins_.cranberrygame_CordovaVungle.prototype;
+	pluginProto.Type = function(plugin)
+	{
+		this.plugin = plugin;
+		this.runtime = plugin.runtime;
+	};
+	var typeProto = pluginProto.Type.prototype;
+/*
+	var fbAppID = "";
+	var fbAppSecret = "";
+*/
+	var appId = '';
+	var email = "";
+	var licenseKey = "";
+	typeProto.onCreate = function()
+	{
+/*
+		var newScriptTag=document.createElement('script');
+		newScriptTag.setAttribute("type","text/javascript");
+		newScriptTag.setAttribute("src", "mylib.js");
+		document.getElementsByTagName("head")[0].appendChild(newScriptTag);
+		var scripts=document.getElementsByTagName("script");
+		var scriptExist=false;
+		for(var i=0;i<scripts.length;i++){
+			if(scripts[i].src.indexOf("cordova.js")!=-1||scripts[i].src.indexOf("phonegap.js")!=-1){
+				scriptExist=true;
+				break;
+			}
+		}
+		if(!scriptExist){
+			var newScriptTag=document.createElement("script");
+			newScriptTag.setAttribute("type","text/javascript");
+			newScriptTag.setAttribute("src", "cordova.js");
+			document.getElementsByTagName("head")[0].appendChild(newScriptTag);
+		}
+*/
+		if(this.runtime.isBlackberry10 || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81){
+			var scripts=document.getElementsByTagName("script");
+			var scriptExist=false;
+			for(var i=0;i<scripts.length;i++){
+				if(scripts[i].src.indexOf("cordova.js")!=-1||scripts[i].src.indexOf("phonegap.js")!=-1){
+					scriptExist=true;
+					break;
+				}
+			}
+			if(!scriptExist){
+				var newScriptTag=document.createElement("script");
+				newScriptTag.setAttribute("type","text/javascript");
+				newScriptTag.setAttribute("src", "cordova.js");
+				document.getElementsByTagName("head")[0].appendChild(newScriptTag);
+			}
+		}
+	};
+	pluginProto.Instance = function(type)
+	{
+		this.type = type;
+		this.runtime = type.runtime;
+	};
+	var instanceProto = pluginProto.Instance.prototype;
+	instanceProto.onCreate = function()
+	{
+/*
+		this.arr = [];
+		this.forX = 0;
+		var self=this;
+		window.addEventListener("resize", function () {//cranberrygame
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaVungle.prototype.cnds.TriggerCondition, self);
+		});
+*/
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window['vungle'] == 'undefined')
+            return;
+		if (this.runtime.isAndroid){
+			appId = this.properties[0];
+		}
+		else if (this.runtime.isiOS){
+			appId = this.properties[1];
+		}
+		email = "cranberrygame@yahoo.com";
+		licenseKey = "31b3b6f780f3a8a4c0827feb2647924c";
+		if (appId == "")
+			return;
+		window["vungle"]["setLicenseKey"](email, licenseKey);
+		window['vungle']['setUp'](appId);
+		var self = this;
+		window['vungle']['onRewardedVideoAdLoaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaVungle.prototype.cnds.OnRewardedVideoAdLoaded, self);
+		};
+		window['vungle']['onRewardedVideoAdShown'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaVungle.prototype.cnds.OnRewardedVideoAdShown, self);
+		};
+		window['vungle']['onRewardedVideoAdHidden'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaVungle.prototype.cnds.OnRewardedVideoAdHidden, self);
+		};
+		window['vungle']['onRewardedVideoAdCompleted'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaVungle.prototype.cnds.OnRewardedVideoAdCompleted, self);
+		};
+/*
+		window['vungle']['onRewardedVideoAdNotCompleted'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaVungle.prototype.cnds.OnRewardedVideoAdNotCompleted, self);
+		};
+*/
+	};
+	instanceProto.draw = function(ctx)
+	{
+	};
+	instanceProto.drawGL = function (glw)
+	{
+	};
+/*
+	instanceProto.at = function (x)
+	{
+		return this.arr[x];
+	};
+	instanceProto.set = function (x, val)
+	{
+		this.arr[x] = val;
+	};
+	instanceProto.doForEachTrigger = function (current_event)
+	{
+		this.runtime.pushCopySol(current_event.solModifiers);
+		current_event.retrigger();
+		this.runtime.popSol(current_event.solModifiers);
+	};
+*/
+	function Cnds() {};
+/*
+	Cnds.prototype.MyCondition = function (myparam)
+	{
+		return myparam >= 0;
+	};
+	Cnds.prototype.TriggerCondition = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.ArrForEach = function ()
+	{
+        var current_event = this.runtime.getCurrentEventStack().current_event;
+		this.forX = 0;
+		for (this.forX = 0; this.forX < this.arr.length; this.forX++)
+		{
+			this.doForEachTrigger(current_event);
+		}
+		this.forX = 0;
+		return false;
+	};
+*/
+	Cnds.prototype.OnAvailable = function ()//deprecated
+	{
+		return true;
+	};
+	Cnds.prototype.OnUnavailable = function ()//deprecated
+	{
+		return true;
+	};
+	Cnds.prototype.OnRewardedVideoAdLoaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnRewardedVideoAdShown = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnRewardedVideoAdHidden = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnRewardedVideoAdCompleted = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnRewardedVideoAdNotCompleted = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.IsShowingRewardedVideoAd = function ()
+	{
+	    if (typeof window["vungle"] == 'undefined')
+			return false;
+		return window["vungle"]["isShowingRewardedVideoAd"]();
+	};
+	Cnds.prototype.LoadedRewardedVideoAd = function ()
+	{
+	    if (typeof window["vungle"] == 'undefined')
+			return false;
+		return window["vungle"]["loadedRewardedVideoAd"]();
+	};
+	pluginProto.cnds = new Cnds();
+	function Acts() {};
+/*
+	Acts.prototype.MyAction = function (myparam)
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isBlackberry10 || this.runtime.isiOS || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81))
+			return;
+        if (typeof navigator["camera"] == 'undefined')
+            return;
+		alert(myparam);
+	};
+	Acts.prototype.TriggerAction = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isBlackberry10 || this.runtime.isiOS || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81))
+			return;
+        if (typeof navigator["camera"] == 'undefined')
+            return;
+		var self=this;
+		self.runtime.trigger(cr.plugins_.cranberrygame_CordovaVungle.prototype.cnds.TriggerCondition, self);
+	};
+	Acts.prototype.Open = function (URL, locationBar)
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isBlackberry10 || this.runtime.isiOS || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81))
+			return;
+        if (typeof navigator["camera"] == 'undefined')
+            return;
+	};
+*/
+	Acts.prototype.CheckAvailable = function ()//deprecated
+	{
+	};
+	Acts.prototype.ShowRewardedVideoAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window['vungle'] == 'undefined')
+            return;
+		if (appId == "")
+			return;
+		window['vungle']['showRewardedVideoAd']();
+	}
+	pluginProto.acts = new Acts();
+	function Exps() {};
+/*
+	Exps.prototype.CellXCount = function (ret)	// 'ret' must always be the first parameter - always return the expression's result through it!
+	{
+		ret.set_int(1337);				// return our value
+	};
+	Exps.prototype.Text = function (ret, param) //cranberrygame
+	{
+		ret.set_string("Hello");		// for ef_return_string
+	};
+	Exps.prototype.CurValue = function (ret)
+	{
+		ret.set_any(this.at(this.forX));
+	};
+	Exps.prototype.At = function (ret, x_)
+	{
+		ret.set_any(this.at(x));
+	};
+	Exps.prototype.Width = function (ret)
+	{
+		ret.set_int(this.cx);
+	};
+*/
+	pluginProto.exps = new Exps();
+}());
 cr.getObjectRefTable = function () { return [
-	cr.plugins_.Sprite,
 	cr.plugins_.Touch,
-	cr.plugins_.cranberrygame_CordovaAdColony,
+	cr.plugins_.Sprite,
+	cr.plugins_.cranberrygame_CordovaUnityAds,
+	cr.plugins_.cranberrygame_CordovaAdBuddiz,
 	cr.plugins_.cranberrygame_CordovaRevMob,
+	cr.plugins_.cranberrygame_CordovaVungle,
 	cr.system_object.prototype.cnds.OnLayoutStart,
 	cr.plugins_.cranberrygame_CordovaRevMob.prototype.acts.PreloadVideoAd,
+	cr.plugins_.cranberrygame_CordovaAdBuddiz.prototype.acts.PreloadRewardedVideoAd,
 	cr.plugins_.Touch.prototype.cnds.OnTouchObject,
-	cr.plugins_.cranberrygame_CordovaAdColony.prototype.acts.ShowRewardedVideoAd,
-	cr.plugins_.cranberrygame_CordovaRevMob.prototype.acts.ShowVideoAd
+	cr.plugins_.cranberrygame_CordovaAdBuddiz.prototype.acts.ShowRewardedVideoAd,
+	cr.plugins_.cranberrygame_CordovaRevMob.prototype.acts.ShowVideoAd,
+	cr.plugins_.cranberrygame_CordovaUnityAds.prototype.acts.ShowVideoAd,
+	cr.plugins_.cranberrygame_CordovaVungle.prototype.acts.ShowRewardedVideoAd
 ];};
