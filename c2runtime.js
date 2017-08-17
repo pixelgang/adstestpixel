@@ -3478,6 +3478,7 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 		this.enableFrontToBack = false;
 		this.earlyz_index = 0;
 		this.ctx = null;
+		this.fullscreenOldMarginCss = "";
 		this.firstInFullscreen = false;
 		this.oldWidth = 0;		// for restoring non-fullscreen canvas after fullscreen
 		this.oldHeight = 0;
@@ -4016,6 +4017,11 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 					offy = (h - newh) / 2;
 					h = newh;
 				}
+			}
+			if (isfullscreen && !this.isNWjs)
+			{
+				offx = 0;
+				offy = 0;
 			}
 		}
 		else if (this.isNWjs && this.isNodeFullscreen && this.fullscreen_mode_set === 0)
@@ -5002,12 +5008,27 @@ quat4.str=function(a){return"["+a[0]+", "+a[1]+", "+a[2]+", "+a[3]+"]"};
 			if (isfullscreen)
 			{
 				if (!this.firstInFullscreen)
+				{
+					this.fullscreenOldMarginCss = jQuery(this.canvas).css("margin") || "0";
 					this.firstInFullscreen = true;
+				}
+				if (!this.isChrome && !this.isNWjs)
+				{
+					jQuery(this.canvas).css({
+						"margin-left": "" + Math.floor((screen.width - (this.width / this.devicePixelRatio)) / 2) + "px",
+						"margin-top": "" + Math.floor((screen.height - (this.height / this.devicePixelRatio)) / 2) + "px"
+					});
+				}
 			}
 			else
 			{
 				if (this.firstInFullscreen)
 				{
+					if (!this.isChrome && !this.isNWjs)
+					{
+						jQuery(this.canvas).css("margin", this.fullscreenOldMarginCss);
+					}
+					this.fullscreenOldMarginCss = "";
 					this.firstInFullscreen = false;
 					if (this.fullscreen_mode === 0)
 					{
@@ -7891,7 +7912,7 @@ window["cr_setSuspended"] = function(s)
 		this.height = this.originalHeight;
 		this.scrollX = (this.runtime.original_width / 2);
 		this.scrollY = (this.runtime.original_height / 2);
-		var i, k, len, lenk, type, type_instances, initial_inst, inst, iid, t, s, p, q, type_data, layer;
+		var i, k, len, lenk, type, type_instances, inst, iid, t, s, p, q, type_data, layer;
 		for (i = 0, len = this.runtime.types_by_index.length; i < len; i++)
 		{
 			type = this.runtime.types_by_index[i];
@@ -7999,12 +8020,7 @@ window["cr_setSuspended"] = function(s)
 		}
 		for (i = 0, len = this.initial_nonworld.length; i < len; i++)
 		{
-			initial_inst = this.initial_nonworld[i];
-			type = this.runtime.types_by_index[initial_inst[1]];
-			if (!type.is_contained)
-			{
-				inst = this.runtime.createInstanceFromInit(this.initial_nonworld[i], null, true);
-			}
+			inst = this.runtime.createInstanceFromInit(this.initial_nonworld[i], null, true);
 ;
 		}
 		this.runtime.changelayout = null;
@@ -17418,7 +17434,7 @@ cr.plugins_.Touch = function(runtime)
 		var t = this.touches[index];
 		var dist = cr.distanceTo(t.x, t.y, t.lastx, t.lasty);
 		var timediff = (t.time - t.lasttime) / 1000;
-		if (timediff <= 0)
+		if (timediff === 0)
 			ret.set_float(0);
 		else
 			ret.set_float(dist / timediff);
@@ -17434,7 +17450,7 @@ cr.plugins_.Touch = function(runtime)
 		var touch = this.touches[index];
 		var dist = cr.distanceTo(touch.x, touch.y, touch.lastx, touch.lasty);
 		var timediff = (touch.time - touch.lasttime) / 1000;
-		if (timediff <= 0)
+		if (timediff === 0)
 			ret.set_float(0);
 		else
 			ret.set_float(dist / timediff);
@@ -17805,10 +17821,554 @@ cr.plugins_.cranberrygame_CordovaAdColony = function(runtime)
 */
 	pluginProto.exps = new Exps();
 }());
+;
+;
+/*
+cr.plugins_.cranberrygame_CordovaRevMob = function(runtime)
+{
+	this.runtime = runtime;
+	Type
+		onCreate
+	Instance
+		onCreate
+		draw
+		drawGL
+	cnds
+	acts
+	exps
+};
+*/
+cr.plugins_.cranberrygame_CordovaRevMob = function(runtime)
+{
+	this.runtime = runtime;
+};
+(function ()
+{
+	var pluginProto = cr.plugins_.cranberrygame_CordovaRevMob.prototype;
+	pluginProto.Type = function(plugin)
+	{
+		this.plugin = plugin;
+		this.runtime = plugin.runtime;
+	};
+	var typeProto = pluginProto.Type.prototype;
+/*
+	var fbAppID = "";
+	var fbAppSecret = "";
+*/
+	var mediaId;
+	var isOverlap;
+	var email = "";
+	var licenseKey = "";
+	typeProto.onCreate = function()
+	{
+/*
+		var newScriptTag=document.createElement('script');
+		newScriptTag.setAttribute("type","text/javascript");
+		newScriptTag.setAttribute("src", "mylib.js");
+		document.getElementsByTagName("head")[0].appendChild(newScriptTag);
+		var scripts=document.getElementsByTagName("script");
+		var scriptExist=false;
+		for(var i=0;i<scripts.length;i++){
+			if(scripts[i].src.indexOf("cordova.js")!=-1||scripts[i].src.indexOf("phonegap.js")!=-1){
+				scriptExist=true;
+				break;
+			}
+		}
+		if(!scriptExist){
+			var newScriptTag=document.createElement("script");
+			newScriptTag.setAttribute("type","text/javascript");
+			newScriptTag.setAttribute("src", "cordova.js");
+			document.getElementsByTagName("head")[0].appendChild(newScriptTag);
+		}
+*/
+		if(this.runtime.isBlackberry10 || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81){
+			var scripts=document.getElementsByTagName("script");
+			var scriptExist=false;
+			for(var i=0;i<scripts.length;i++){
+				if(scripts[i].src.indexOf("cordova.js")!=-1||scripts[i].src.indexOf("phonegap.js")!=-1){
+					scriptExist=true;
+					break;
+				}
+			}
+			if(!scriptExist){
+				var newScriptTag=document.createElement("script");
+				newScriptTag.setAttribute("type","text/javascript");
+				newScriptTag.setAttribute("src", "cordova.js");
+				document.getElementsByTagName("head")[0].appendChild(newScriptTag);
+			}
+		}
+	};
+	pluginProto.Instance = function(type)
+	{
+		this.type = type;
+		this.runtime = type.runtime;
+	};
+	var instanceProto = pluginProto.Instance.prototype;
+	instanceProto.onCreate = function()
+	{
+/*
+		var self=this;
+		window.addEventListener("resize", function () {//cranberrygame
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.TriggerCondition, self);
+		});
+*/
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+		if (typeof window["revmob"] == 'undefined')//
+			return;
+		if (this.runtime.isAndroid){
+			mediaId = this.properties[0];
+		}
+		else if (this.runtime.isiOS){
+			mediaId = this.properties[1];
+		}
+		isOverlap = this.properties[2]==0?false:true;
+		email = "cranberrygame@yahoo.com";
+		licenseKey = "31837c3186265652c8a64758a3cd50aa";
+		window["revmob"]["setLicenseKey"](email, licenseKey);
+		window["revmob"]["setUp"](mediaId, isOverlap);
+		var self = this;
+		window['revmob']['onBannerAdPreloaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnBannerAdPreloaded, self);
+		};
+		window['revmob']['onBannerAdLoaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnBannerAdLoaded, self);
+		};
+		window['revmob']['onBannerAdShown'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnBannerAdShown, self);
+		};
+		window['revmob']['onBannerAdHidden'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnBannerAdHidden, self);
+		};
+		window['revmob']['onInterstitialAdPreloaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnInterstitialAdPreloaded, self);
+		};
+		window['revmob']['onInterstitialAdLoaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnInterstitialAdLoaded, self);
+		};
+		window['revmob']['onInterstitialAdShown'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnInterstitialAdShown, self);
+		};
+		window['revmob']['onInterstitialAdHidden'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnInterstitialAdHidden, self);
+		};
+		window['revmob']['onVideoAdPreloaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnVideoAdPreloaded, self);
+		};
+		window['revmob']['onVideoAdLoaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnVideoAdLoaded, self);
+		};
+		window['revmob']['onVideoAdShown'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnVideoAdShown, self);
+		};
+		window['revmob']['onVideoAdHidden'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnVideoAdHidden, self);
+		};
+		window['revmob']['onRewardedVideoAdPreloaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnRewardedVideoAdPreloaded, self);
+		};
+		window['revmob']['onRewardedVideoAdLoaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnRewardedVideoAdLoaded, self);
+		};
+		window['revmob']['onRewardedVideoAdShown'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnRewardedVideoAdShown, self);
+		};
+		window['revmob']['onRewardedVideoAdHidden'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnRewardedVideoAdHidden, self);
+		};
+		window['revmob']['onRewardedVideoAdCompleted'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnRewardedVideoAdCompleted, self);
+		};
+		window['revmob']['onPopupAdPreloaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnPopupAdPreloaded, self);
+		};
+		window['revmob']['onPopupAdLoaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnPopupAdLoaded, self);
+		};
+		window['revmob']['onPopupAdShown'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnPopupAdShown, self);
+		};
+		window['revmob']['onPopupAdHidden'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnPopupAdHidden, self);
+		};
+		window['revmob']['onLinkAdPreloaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnLinkAdPreloaded, self);
+		};
+		window['revmob']['onLinkAdLoaded'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnLinkAdLoaded, self);
+		};
+		window['revmob']['onLinkAdShown'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnLinkAdShown, self);
+		};
+		window['revmob']['onLinkAdHidden'] = function() {
+			self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.OnLinkAdHidden, self);
+		};
+	};
+	instanceProto.draw = function(ctx)
+	{
+	};
+	instanceProto.drawGL = function (glw)
+	{
+	};
+/*
+	instanceProto.at = function (x)
+	{
+		return this.arr[x];
+	};
+	instanceProto.set = function (x, val)
+	{
+		this.arr[x] = val;
+	};
+*/
+	function Cnds() {};
+/*
+	Cnds.prototype.MyCondition = function (myparam)
+	{
+		return myparam >= 0;
+	};
+	Cnds.prototype.TriggerCondition = function ()
+	{
+		return true;
+	};
+*/
+	Cnds.prototype.OnBannerAdPreloaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnBannerAdLoaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnBannerAdShown = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnBannerAdHidden = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnInterstitialAdPreloaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnInterstitialAdLoaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnInterstitialAdShown = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnInterstitialAdHidden = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnVideoAdPreloaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnVideoAdLoaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnVideoAdShown = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnVideoAdHidden = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnRewardedVideoAdPreloaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnRewardedVideoAdLoaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnRewardedVideoAdShown = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnRewardedVideoAdHidden = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnRewardedVideoAdCompleted = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnPopupAdPreloaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnPopupAdLoaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnPopupAdShown = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnPopupAdHidden = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnLinkAdPreloaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnLinkAdLoaded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnLinkAdShown = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnLinkAdHidden = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.LoadedBannerAd = function ()
+	{
+	    if (typeof window["revmob"] == 'undefined')
+			return false;
+		return window["revmob"]["loadedBannerAd"]();
+	};
+	Cnds.prototype.LoadedInterstitialAd = function ()
+	{
+	    if (typeof window["revmob"] == 'undefined')
+			return false;
+		return window["revmob"]["loadedInterstitialAd"]();
+	};
+	Cnds.prototype.LoadedVideoAd = function ()
+	{
+	    if (typeof window["revmob"] == 'undefined')
+			return false;
+		return window["revmob"]["loadedVideoAd"]();
+	};
+	Cnds.prototype.LoadedRewardedVideoAd = function ()
+	{
+	    if (typeof window["revmob"] == 'undefined')
+			return false;
+		return window["revmob"]["loadedRewardedVideoAd"]();
+	};
+	Cnds.prototype.LoadedPopupAd = function ()
+	{
+	    if (typeof window["revmob"] == 'undefined')
+			return false;
+		return window["revmob"]["loadedPopupAd"]();
+	};
+	Cnds.prototype.LoadedLinkAd = function ()
+	{
+	    if (typeof window["revmob"] == 'undefined')
+			return false;
+		return window["revmob"]["loadedLinkAd"]();
+	};
+	Cnds.prototype.IsShowingBannerAd = function ()
+	{
+	    if (typeof window["revmob"] == 'undefined')
+			return false;
+		return window["revmob"]["isShowingBannerAd"]();
+	};
+	Cnds.prototype.IsShowingInterstitialAd = function ()
+	{
+	    if (typeof window["revmob"] == 'undefined')
+			return false;
+		return window["revmob"]["isShowingInterstitialAd"]();
+	};
+	Cnds.prototype.IsShowingVideoAd = function ()
+	{
+	    if (typeof window["revmob"] == 'undefined')
+			return false;
+		return window["revmob"]["isShowingVideoAd"]();
+	};
+	Cnds.prototype.IsShowingRewardedVideoAd = function ()
+	{
+	    if (typeof window["revmob"] == 'undefined')
+			return false;
+		return window["revmob"]["isShowingRewardedVideoAd"]();
+	};
+	Cnds.prototype.IsShowingPopupAd = function ()
+	{
+	    if (typeof window["revmob"] == 'undefined')
+			return false;
+		return window["revmob"]["isShowingPopupAd"]();
+	};
+	Cnds.prototype.IsShowingLinkAd = function ()
+	{
+	    if (typeof window["revmob"] == 'undefined')
+			return false;
+		return window["revmob"]["isShowingLinkAd"]();
+	};
+	pluginProto.cnds = new Cnds();
+	function Acts() {};
+/*
+	Acts.prototype.MyAction = function (myparam)
+	{
+		alert(myparam);
+	};
+	Acts.prototype.TriggerAction = function ()
+	{
+		var self=this;
+		self.runtime.trigger(cr.plugins_.cranberrygame_CordovaRevMob.prototype.cnds.TriggerCondition, self);
+	};
+*/
+	Acts.prototype.PreloadBannerAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["revmob"] == 'undefined')
+            return;
+		window["revmob"]["preloadBannerAd"]();
+	}
+	Acts.prototype.ShowBannerAd = function (position)
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["revmob"] == 'undefined')
+            return;
+		var positionStr = "top-center";
+		if (position==0)
+			positionStr = "top-left";
+		else if (position==1)
+			positionStr = "top-center";
+		else if (position==2)
+			positionStr = "top-right";
+		else if (position==3)
+			positionStr = "left";
+		else if (position==4)
+			positionStr = "center";
+		else if (position==5)
+			positionStr = "right";
+		else if (position==6)
+			positionStr = "bottom-left";
+		else if (position==7)
+			positionStr = "bottom-center";
+		else if (position==8)
+			positionStr = "bottom-right";
+		window["revmob"]["showBannerAd"](positionStr);
+	};
+	Acts.prototype.ReloadBannerAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["revmob"] == 'undefined')
+            return;
+		window["revmob"]["reloadBannerAd"]();
+	}
+	Acts.prototype.HideBannerAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["revmob"] == 'undefined')
+            return;
+		window["revmob"]["hideBannerAd"]();
+	};
+	Acts.prototype.PreloadInterstitialAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["revmob"] == 'undefined')
+            return;
+		window["revmob"]["preloadInterstitialAd"]();
+	}
+	Acts.prototype.ShowInterstitialAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["revmob"] == 'undefined')
+            return;
+		window["revmob"]["showInterstitialAd"]();
+	};
+	Acts.prototype.PreloadVideoAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["revmob"] == 'undefined')
+            return;
+		window["revmob"]["preloadVideoAd"]();
+	}
+	Acts.prototype.ShowVideoAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["revmob"] == 'undefined')
+            return;
+		window["revmob"]["showVideoAd"]();
+	};
+	Acts.prototype.PreloadRewardedVideoAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["revmob"] == 'undefined')
+            return;
+		window["revmob"]["preloadRewardedVideoAd"]();
+	}
+	Acts.prototype.ShowRewardedVideoAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["revmob"] == 'undefined')
+            return;
+		window["revmob"]["showRewardedVideoAd"]();
+	};
+	Acts.prototype.PreloadPopupAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["revmob"] == 'undefined')
+            return;
+		window["revmob"]["preloadPopupAd"]();
+	}
+	Acts.prototype.ShowPopupAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["revmob"] == 'undefined')
+            return;
+		window["revmob"]["showPopupAd"]();
+	};
+	Acts.prototype.PreloadLinkAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["revmob"] == 'undefined')
+            return;
+		window["revmob"]["preloadLinkAd"]();
+	}
+	Acts.prototype.ShowLinkAd = function ()
+	{
+		if (!(this.runtime.isAndroid || this.runtime.isiOS))
+			return;
+        if (typeof window["revmob"] == 'undefined')
+            return;
+		window["revmob"]["showLinkAd"]();
+	};
+	pluginProto.acts = new Acts();
+	function Exps() {};
+/*
+	Exps.prototype.MyExpression = function (ret)	// 'ret' must always be the first parameter - always return the expression's result through it!
+	{
+		ret.set_int(1337);				// return our value
+	};
+	Exps.prototype.Text = function (ret, param) //cranberrygame
+	{
+		ret.set_string("Hello");		// for ef_return_string
+	};
+*/
+	pluginProto.exps = new Exps();
+}());
 cr.getObjectRefTable = function () { return [
 	cr.plugins_.Sprite,
 	cr.plugins_.Touch,
 	cr.plugins_.cranberrygame_CordovaAdColony,
+	cr.plugins_.cranberrygame_CordovaRevMob,
+	cr.system_object.prototype.cnds.OnLayoutStart,
+	cr.plugins_.cranberrygame_CordovaRevMob.prototype.acts.PreloadVideoAd,
 	cr.plugins_.Touch.prototype.cnds.OnTouchObject,
-	cr.plugins_.cranberrygame_CordovaAdColony.prototype.acts.ShowRewardedVideoAd
+	cr.plugins_.cranberrygame_CordovaAdColony.prototype.acts.ShowRewardedVideoAd,
+	cr.plugins_.cranberrygame_CordovaRevMob.prototype.acts.ShowVideoAd
 ];};
