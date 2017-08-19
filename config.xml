@@ -10,6 +10,7 @@
 
 	<preference name="permissions" value="none"/>
 	<preference name="android-targetSdkVersion" value="21" />
+	<preference name="xwalkMultipleApk" value="true" />  
 
 	<feature name="http://api.phonegap.com/1.0/network"/>
 	<feature name="http://api.phonegap.com/1.0/camera"/>
