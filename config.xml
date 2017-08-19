@@ -35,7 +35,7 @@
 
 	<plugin name="https://github.com/cranberrygame/cordova-plugin-ad-adbuddiz" source="npm" />
 	<plugin name="https://github.com/cranberrygame/cordova-plugin-ad-revmob" source="npm" />
-	<plugin name="https://github.com/cranberrygame/cordova-plugin-ad-unityads" source="npm" />
+	
 	<plugin name="https://github.com/cranberrygame/cordova-plugin-ad-vungle" source="npm" />
 
 	<!-- Optional splash screen image, e.g.: -->
