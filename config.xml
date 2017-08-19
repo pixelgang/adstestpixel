@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" xmlns:android = "http://schemas.android.com/apk/res/android" id="com.pixelgang.ads" version="1.1">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" xmlns:android = "http://schemas.android.com/apk/res/android" id="com.pixelgang.ads" version="1.2">
 
 	<name>adtestpg</name>
 	<description>d test</description>
@@ -10,7 +10,7 @@
 
 	<preference name="permissions" value="none"/>
 	<preference name="android-targetSdkVersion" value="21" />
-	<preference name="xwalkMultipleApk" value="true" />  
+	<preference name="xwalkMultipleApk" value="false" />  
 
 	<feature name="http://api.phonegap.com/1.0/network"/>
 	<feature name="http://api.phonegap.com/1.0/camera"/>
