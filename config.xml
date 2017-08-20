@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" xmlns:android = "http://schemas.android.com/apk/res/android" id="com.pixelgang.ads" version="1.3">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" xmlns:android = "http://schemas.android.com/apk/res/android" id="com.pixelgang.ads" version="2.0">
 
 	<name>adtestpg</name>
 	<description>d test</description>
@@ -13,7 +13,7 @@
 	<preference name="xwalkMultipleApk" value="false" />  
 
 	<feature name="http://api.phonegap.com/1.0/network"/>
-	<feature name="http://api.phonegap.com/1.0/camera"/>
+	
 
 	<preference name="orientation" value="portrait" />
 	<preference name="fullscreen" value="true" />
